@@ -485,7 +485,7 @@ def show_Amazon_dashboard(df):
         # Adjust annotation position: Ensure it stays inside the bars
         ax.annotate(f'{int(width):,}', 
                     (width + 5, p.get_y() + p.get_height() / 2),  # Position slightly inside the bar
-                    ha='left', va='center', color='white', fontsize=12)
+                    ha='left', va='center', color='black', fontsize=12)
 
     # Set titles and labels with larger font size
     ax.set_title("+ve GROWTH for Current vs Last Month (2 Months)", fontsize=16,  pad=15)
