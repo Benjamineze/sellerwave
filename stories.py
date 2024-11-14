@@ -2,12 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import missingno as msno
 from collections import Counter 
 import re
 import numpy as np
 from google.cloud import bigquery
-from rich.console import Console
 from rich.text import Text
 import textwrap
 import os
