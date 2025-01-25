@@ -143,7 +143,7 @@ def show_stories(df):
 # All PRODUCTS WITH NEGATIVE GROWTH IN THE LAST 3 MONTHS
 
     st.markdown(
-    "<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>All Products with <span style='color:green;'>Negative Growth<span style='color:blue;'> in the last 3 months</h1>", 
+    "<h1 style='color:grey; font-size: 18px; font-weight: bold; font-style: italic;'>All Products with <span style='color:green;'>Negative Growth<span style='color:blue;'> in the last 3 months</h1>", 
     unsafe_allow_html=True
     )
 
@@ -214,7 +214,7 @@ def show_stories(df):
 
 
     st.markdown(
-    "<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>All Products with <span style='color:green;'>Month-on-Month growth <span style='color:blue;'>in the last 3 months</h1>", 
+    "<h1 style='color:grey; font-size: 18px; font-weight: bold; font-style: italic;'>All Products with <span style='color:green;'>Month-on-Month growth <span style='color:blue;'>in the last 3 months</h1>", 
     unsafe_allow_html=True
     )
     
@@ -276,7 +276,7 @@ def show_stories(df):
 
 
     st.markdown(
-    "<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>Products with <span style='color:green;'>Month-on-month <span style='color:red;'>Growth <span style='color:blue;'>(2Months)</h1>", 
+    "<h1 style='color:grey; font-size: 18px; font-weight: bold; font-style: italic;'>Products with <span style='color:green;'>Month-on-month <span style='color:red;'>Growth <span style='color:blue;'>(2Months)</h1>", 
     unsafe_allow_html=True
     )
 
@@ -335,7 +335,7 @@ def show_stories(df):
 
 
     st.markdown(
-    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Positive Growth<span style='color:blue;'> in the last 3 months</h1>", 
+    "<h1 style='color:green; font-size: 18px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Positive Growth<span style='color:blue;'> in the last 3 months</h1>", 
     unsafe_allow_html=True
     )
     
@@ -403,7 +403,7 @@ def show_stories(df):
 
 
     st.markdown(
-    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Negative Growth</span> in the last 3 months <span style='color:red;'>(zero to -ve)</h1>", 
+    "<h1 style='color:green; font-size: 18px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Negative Growth</span> in the last 3 months <span style='color:red;'>(zero to -ve)</h1>", 
     unsafe_allow_html=True
     )
     # Prepare the data (using the function)
@@ -469,7 +469,7 @@ def show_stories(df):
 # $0-20 PRODUCTS WITH MONTH ON MONTH GROWTH (3 MONTHS)
 
     st.markdown(
-    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'> Products with <span style='color:green;'>Month-on-Month growth <span style='color:blue;'>in the last 3 months</h1>", 
+    "<h1 style='color:green; font-size: 18px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'> Products with <span style='color:green;'>Month-on-Month growth <span style='color:blue;'>in the last 3 months</h1>", 
     unsafe_allow_html=True
     )
     
