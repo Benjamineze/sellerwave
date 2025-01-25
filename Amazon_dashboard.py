@@ -348,6 +348,12 @@ def show_Amazon_dashboard(df):
     # Prepare the data
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
 
+    # Check if at least last two months are available
+    if len(last_three_months) < 2:
+        st.write("Last 2 months data are not available.")
+        return
+
+
     # Filter products sold in the last three months
     products_sold_last_months = df[df['Month'].isin(last_three_months)]
 
