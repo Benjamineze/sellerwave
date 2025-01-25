@@ -344,7 +344,11 @@ def show_Amazon_dashboard(df):
 #PRODUCTS WITH POSITIVE MONTH ON MONTH GROWTH (3 MONTHS)
 
 
-    st.write('#### Products with month-on-month Growth (3 months)')
+    st.markdown(
+    "<h1 style='color:grey; font-size: 18px; font-weight: bold; font-style: italic;'> Products with <span style='color:green;'>Month-on-Month Growth <span style='color:blue;'>( 3 months)</h1>", 
+    unsafe_allow_html=True
+    )
+    
     # Prepare the data
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
 
@@ -425,6 +429,11 @@ def show_Amazon_dashboard(df):
 
 #CURRENT VS LAST MONTH GROWTH (2 MONTH)
     st.write("#### Product with Month-on-Month Growth (2 Months)")
+
+    st.markdown(
+    "<h1 style='color:grey; font-size: 18px; font-weight: bold; font-style: italic;'> Products with <span style='color:green;'>Month-on-Month Growth <span style='color:blue;'>( 2 months)</h1>", 
+    unsafe_allow_html=True
+    )
     
     # Prepare the data (using the function)
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
