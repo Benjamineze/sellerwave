@@ -105,7 +105,12 @@ def show_stories(df):
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
     # Display in Streamlit
-    st.table(result.style.set_properties(**{'white-space': 'nowrap'}))
+
+    styled_table = pivot_result.style.set_properties(
+    subset=['Product Name'], **{'white-space': 'normal', 'word-wrap': 'break-word'}
+    )
+
+    st.table(styled_table)
 
 
 
