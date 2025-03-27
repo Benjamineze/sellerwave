@@ -106,7 +106,7 @@ def show_stories(df):
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
     # Display in Streamlit
-    st.table(result)
+    st.dataframe(result, use_container_width=True)
    
 
 
