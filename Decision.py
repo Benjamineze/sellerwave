@@ -77,7 +77,7 @@ def show_Decision(df):
 )
 
     st.markdown(
-    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Excellent Rating</span> and <span style='color:green;'>Positive Growth </span>in the last 3 months</h1>", 
+    "<h1 style='color:green; font-size: 17px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Excellent Rating</span> and <span style='color:green;'>Positive Growth </span><span style='color:blue;'>in the last 3 months</h1>", 
     unsafe_allow_html=True
 )
     
@@ -87,11 +87,11 @@ def show_Decision(df):
 
     # Check if at least last two months are available
     if len(last_three_months) < 2:
-        st.write("Last 2 months data are not available.")
-        return
+        st.write("Suficient data are not available yet.")
+        return pd.DataFrame()
 
 
-    # Filter products sold in the last two or three months
+    # FILTER ALL PRODUCTS SOLD IN THE LAST 3 MONTHS
     products_sold_last_months = df[df['Month'].isin(last_three_months)]
 
     # Find common products sold across the selected months (intersection of product names)
@@ -101,57 +101,58 @@ def show_Decision(df):
             set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
             set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
         )
-    else:
-        # If fewer than three months are available, find products sold in just the last two months
-        common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
-            set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name'])
-        )
+        
 
-    # Filter the DataFrame for these common products
-    common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
 
-    # Filter for Price_cat $0-20 only
-    common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
+        # Filter the DataFrame for these common products
+        common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
 
-    common_products_df = common_products_df[common_products_df['Rating_cat'] == 'Excellent']
-                                            
-    # Group by Product Name, Price_cat, and Month, and sum the quantities sold
-    result = common_products_df.groupby(['Product Name', 'Price_cat', 'Rating_cat', 'Month'])['Qty Sold'].sum().reset_index()
+        # Filter for Price_cat $0-20 only
+        common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
 
-    # Pivot the data to get separate columns for each month's quantity sold
-    pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
+        common_products_df = common_products_df[common_products_df['Rating_cat'] == 'Excellent']
+                                                
+        # Group by Product Name, Price_cat, and Month, and sum the quantities sold
+        result = common_products_df.groupby(['Product Name', 'Price_cat', 'Rating_cat', 'Month'])['Qty Sold'].sum().reset_index()
 
-    # Calculate growth between the current month and third last month
-    if third_last_month in pivot_result.columns:
+        # Pivot the data to get separate columns for each month's quantity sold
+        pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
+
+        # Calculate growth between the current month and third last month
+        
         pivot_result['Growth'] = ((pivot_result[current_month] - pivot_result[third_last_month]) / pivot_result[third_last_month]) * 100
 
-    # Filter for rows with positive growth
-    pivot_result = pivot_result[pivot_result['Growth'] > 0]
+        # Filter for rows with positive growth
+        pivot_result = pivot_result[pivot_result['Growth'] > 0]
 
-    # Format the columns for better readability
-    pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-    pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
-    pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
+        # Format the columns for better readability
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
 
-    # Format the third last month if data is available
-    if third_last_month in pivot_result.columns:
+        # Format the third last month if data is available
+        
         pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,}")
         pivot_result = pivot_result[['Product Name', third_last_month, last_month, current_month, 'Growth']]
+        
+        # Reset index and start numbering from 1
+        pivot_result.reset_index(drop=True, inplace=True)
+        pivot_result.index += 1  # Start numbering from 1
+
+        # Display the result as a table in Streamlit
+        st.table(pivot_result)  # Display the DataFrame as a table
+
     else:
-        pivot_result = pivot_result[['Product Name', last_month, current_month, 'Growth']]
-
-    # Reset index and start numbering from 1
-    pivot_result.reset_index(drop=True, inplace=True)
-    pivot_result.index += 1  # Start numbering from 1
-
-    # Display the result as a table in Streamlit
-    st.table(pivot_result)  # Display the DataFrame as a table
-
+        st.markdown(
+    "<h1 style='color:#4A4A48; font-size: 16px; font-weight: bold; font-style: italic;'>sorry...last 3 months data not available at the momemt... </h1>", 
+    unsafe_allow_html=True
+)
+    
 
 
     
     st.markdown(
-    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Excellent Rating</span> and <span style='color:green;'>Positive Growth (2) </span>in the last 3 months</h1>", 
+    "<h1 style='color:green; font-size: 16px; font-weight: bold; font-style: italic;'>$0-20 <span style='color:grey;'>Products with <span style='color:green;'>Excellent Rating</span> and <span style='color:green;'>Positive Growth  </span><span style='color:blue;'>in the last 2 months</h1>", 
     unsafe_allow_html=True
 )
     
@@ -159,72 +160,66 @@ def show_Decision(df):
     # Prepare the data (using the function)
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
 
-    # Filter products sold in the last two or three months
+
+    # Filter products sold in the last two  months
     products_sold_last_months = df[df['Month'].isin(last_three_months)]
 
     # Find common products sold across the selected months (intersection of product names)
-    if third_last_month:
-        # If three months are available, find products sold in all three months
-        common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
-            set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
-            set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
-        )
-    else:
-        # If fewer than three months are available, find products sold in just the last two months
+    if last_month:
+        # If 2 months are available, find products sold in all 2 months
         common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
             set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name'])
         )
 
-    # Filter the DataFrame for these common products
-    common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
+        # Filter the DataFrame for these common products
+        common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
 
-    # Filter for Price_cat $0-20 only
-    common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
+        # Filter for Price_cat $0-20 only
+        common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
 
-    common_products_df = common_products_df[common_products_df['Rating_cat'] == 'Excellent']
+        common_products_df = common_products_df[common_products_df['Rating_cat'] == 'Excellent']
 
 
                                             
-    # Group by Product Name, Price_cat, and Month, and sum the quantities sold
-    result = common_products_df.groupby(['Product Name', 'Price_cat', 'Rating_cat', 'Month'])['Qty Sold'].sum().reset_index()
+        # Group by Product Name, Price_cat, and Month, and sum the quantities sold
+        result = common_products_df.groupby(['Product Name', 'Price_cat', 'Rating_cat', 'Month'])['Qty Sold'].sum().reset_index()
 
-    # Pivot the data to get separate columns for each month's quantity sold
-    pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
-
-    # Calculate growth between the current month and third last month
-    if third_last_month in pivot_result.columns:
-        pivot_result['Growth'] = ((pivot_result[current_month] - pivot_result[third_last_month]) / pivot_result[third_last_month]) * 100
-
-    # Filter for rows with positive growth
-    pivot_result = pivot_result[pivot_result['Growth'] > 0]
+        # Pivot the data to get separate columns for each month's quantity sold
+        pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
 
 
-    pivot_result = pivot_result[
-        (pivot_result[current_month] > pivot_result[last_month]) &
-        (pivot_result[last_month] > pivot_result[third_last_month])
 
-    ]
+        # Calculate growth between the current month and last month
+        
+        pivot_result['Growth'] = ((pivot_result[current_month] - pivot_result[last_month]) / pivot_result[last_month]) * 100
 
-    # Format the columns for better readability
-    pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-    pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
-    pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
+        # Filter for rows with positive growth
+        pivot_result = pivot_result[pivot_result['Growth'] > 0]
 
-    # Format the third last month if data is available
-    if third_last_month in pivot_result.columns:
-        pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,}")
-        pivot_result = pivot_result[['Product Name', third_last_month, last_month, current_month, 'Growth']]
+
+        pivot_result = pivot_result[
+        (pivot_result[current_month] > pivot_result[last_month])
+        ]
+
+        # Format the columns for better readability
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
+
+        pivot_result = pivot_result[['Product Name',  last_month, current_month, 'Growth']]
+        
+        # Reset index and start numbering from 1
+        pivot_result.reset_index(drop=True, inplace=True)
+        pivot_result.index += 1  # Start numbering from 1
+
+        # Display the result as a table in Streamlit
+        st.table(pivot_result)  # Display the DataFrame as a table
     else:
-        pivot_result = pivot_result[['Product Name', last_month, current_month, 'Growth']]
-
-    # Reset index and start numbering from 1
-    pivot_result.reset_index(drop=True, inplace=True)
-    pivot_result.index += 1  # Start numbering from 1
-
-    # Display the result as a table in Streamlit
-    st.table(pivot_result)  # Display the DataFrame as a table
-
-
+          st.markdown(
+    "<h1 style='color:#4A4A48; font-size: 16px; font-weight: bold; font-style: italic;'>sorry...last 2 months data not available at the momemt... </h1>", 
+    unsafe_allow_html=True
+    )
+    
 
 
 
