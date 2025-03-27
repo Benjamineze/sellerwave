@@ -103,7 +103,7 @@ def show_stories(df):
   
    # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
-        
+    
     # Display in Streamlit
     st.markdown(result)  
 
@@ -171,6 +171,9 @@ def show_stories(df):
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
+
+        pivot_result.columns = pivot_result.columns.str.strip()
+        pivot_result.columns = pivot_result.columns.str.encode('ascii', 'ignore').str.decode('utf-8')
 
         # Display the result as a table in Streamlit
         st.table(pivot_result)  # Display the DataFrame as a table
