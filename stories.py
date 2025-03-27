@@ -106,9 +106,7 @@ def show_stories(df):
     
     # Display in Streamlit
 
-    result = result.style.set_properties(subset=["Product Name"], **{'white-space': 'normal'})
-
-    st.table(result)
+    st.dataframe()
    
 
 
