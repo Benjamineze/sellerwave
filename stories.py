@@ -101,8 +101,7 @@ def show_stories(df):
     result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
     # Wrap the 'Product Name' text to a maximum width (e.g., 30 characters per line)
-    result['Product Name'] = result['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=20)))
-  
+    result['Product Name'] = result['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=30)))
    # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
