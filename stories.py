@@ -243,7 +243,11 @@ def show_stories(df):
         pivot_result.index += 1  # Start numbering from 1
 
         # Display the result as a table in Streamlit
-        st.table(pivot_result)
+        #st.table(pivot_result)
+
+        st.table(pivot_result.style.set_properties(**{'white-space': 'nowrap'}))
+
+        
     else:
         st.markdown(
             "<h1 style='color:#4A4A48; font-size: 16px; font-weight: bold; font-style: italic;'>Sorry... last 2 months data not available at the moment...</h1>", 
