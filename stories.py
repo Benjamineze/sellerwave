@@ -105,8 +105,7 @@ def show_stories(df):
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
     # Display in Streamlit
-
-    st.dataframe()
+    st.dataframe(result)
    
 
 
@@ -177,9 +176,8 @@ def show_stories(df):
         pivot_result.columns = pivot_result.columns.str.encode('ascii', 'ignore').str.decode('utf-8')
 
         # Display the result as a table in Streamlit
-        #st.table(pivot_result)  # Display the DataFrame as a table
-        st.table(pivot_result.style.set_properties(**{'white-space': 'nowrap'}))
-
+        st.table(pivot_result)  # Display the DataFrame as a table
+        
 
     
     else:
