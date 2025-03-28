@@ -62,7 +62,7 @@ def prepare_data(df):
 
 def show_stories(df):
     st.markdown(
-        "<h1 style='color:#7D4E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
+        "<h1 style='color:#7D7E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
         unsafe_allow_html=True)
 
     st.markdown(
@@ -94,29 +94,57 @@ def show_stories(df):
     # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
-    # Custom CSS to prevent text wrapping except for Product Name
+    # Custom CSS to handle text wrapping
     st.markdown("""
     <style>
-        .stDataFrame th, .stDataFrame td {
-            white-space: nowrap;
+        /* Target the data table specifically */
+        div[data-testid="stDataFrame"] table {
+            width: 100%;
         }
-        .stDataFrame td:nth-child(1) {
+        
+        /* Prevent wrapping for all cells by default */
+        div[data-testid="stDataFrame"] td {
+            white-space: nowrap;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Allow wrapping only for the Product Name column (first column) */
+        div[data-testid="stDataFrame"] td:nth-child(1) {
             white-space: normal !important;
+            word-wrap: break-word !important;
+            max-width: 300px !important;
+        }
+        
+        /* Header styling */
+        div[data-testid="stDataFrame"] th {
+            white-space: nowrap;
         }
     </style>
     """, unsafe_allow_html=True)
     
-    # Display the dataframe with adjusted column widths
+    # Display the dataframe with adjusted settings
     st.dataframe(
         result,
         column_config={
-            "Product Name": "Product Name",
-            "Price": st.column_config.NumberColumn("Price", format="$%.2f"),
-            "Qty Sold": "Qty Sold"
+            "Product Name": st.column_config.TextColumn(
+                "Product Name",
+                width="large"
+            ),
+            "Price": st.column_config.NumberColumn(
+                "Price",
+                format="$%.2f",
+                width="small"
+            ),
+            "Qty Sold": st.column_config.TextColumn(
+                "Qty Sold",
+                width="small"
+            )
         },
         hide_index=False,
         use_container_width=True,
-        height=(len(result) + 1) * 35 + 3  # Adjust height dynamically
+        height=(len(result) + 1) * 35 + 3
     )
 
 
