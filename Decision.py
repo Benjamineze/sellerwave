@@ -213,7 +213,7 @@ def show_Decision(df):
         pivot_result.index += 1  # Start numbering from 1
 
         # Display the result as a table in Streamlit
-        st.table(pivot_result)  # Display the DataFrame as a table
+        st.pd.dataframe(pivot_result)  # Display the DataFrame as a table
     else:
           st.markdown(
     "<h1 style='color:#4A4A48; font-size: 16px; font-weight: bold; font-style: italic;'>sorry...last 2 months data not available at the momemt... </h1>", 
