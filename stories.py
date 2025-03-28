@@ -93,57 +93,66 @@ def show_stories(df):
     # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
-    # Custom CSS for perfect wrapping control
-    st.markdown("""
+    # Create HTML table with custom styling
+    html = """
     <style>
-        /* Make the table use all available width */
-        .stDataFrame {
+        .custom-table {
             width: 100%;
+            border-collapse: collapse;
         }
-        
-        /* Force the first column to wrap text */
-        .stDataFrame td:nth-child(1) {
+        .custom-table th {
+            background-color: #f8f9fa;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+        .custom-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        .product-name {
             white-space: normal !important;
-            word-break: break-word !important;
-            min-width: 200px;
+            word-wrap: break-word !important;
             max-width: 400px;
+            min-width: 200px;
         }
-        
-        /* Keep other columns compact */
-        .stDataFrame td:not(:nth-child(1)) {
+        .compact-cell {
             white-space: nowrap !important;
             width: 1%;
         }
-        
-        /* Header alignment */
-        .stDataFrame th {
-            white-space: nowrap;
-        }
     </style>
-    """, unsafe_allow_html=True)
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Qty Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
     
-    # Display the dataframe with optimal settings
-    st.dataframe(
-        result,
-        column_config={
-            "Product Name": st.column_config.Column(
-                "Product Name",
-                width="large"
-            ),
-            "Price": st.column_config.NumberColumn(
-                "Price",
-                format="$%.2f",
-                width="small"
-            ),
-            "Qty Sold": st.column_config.Column(
-                "Qty Sold",
-                width="small"
-            )
-        },
-        hide_index=False,
-        use_container_width=True,
-        height=(len(result) + 1) * 35 + 3
-    )
+    # Add table rows
+    for idx, row in result.iterrows():
+        html += f"""
+        <tr>
+            <td class="compact-cell">{idx}</td>
+            <td class="product-name">{row['Product Name']}</td>
+            <td class="compact-cell">${row['Price']}</td>
+            <td class="compact-cell">{row['Qty Sold']}</td>
+        </tr>
+        """
+    
+    html += """
+        </tbody>
+    </table>
+    """
+    
+    # Display the custom table
+    st.markdown(html, unsafe_allow_html=True)
 
 
     # ALL $0-20 PRODUCTS WITH 3 MONTHS CONSECUTIVE SALES
