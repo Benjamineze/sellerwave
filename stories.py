@@ -126,6 +126,10 @@ def show_stories(df):
 
 
     
+    common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
+
+                                                
+    # Group by Product Name, Price_cat, and Month, and sum the qu
     # Prepare the data (using the function)
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
 
@@ -133,26 +137,22 @@ def show_stories(df):
     if len(last_three_months) >= 3:
         
 
-         # FILTER ALL PRODUCTS SOLD IN THE LAST 3 MONTHS
+        # FILTER ALL PRODUCTS SOLD IN THE LAST 3 MONTHS
         products_sold_last_months = df[df['Month'].isin(last_three_months)]
 
-        # Find common products sold across the selected months (intersection of product names)
-        if third_last_month:
-            # If three months are available, find products sold in all three months
-            common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
-            set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
-            set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
-            )
-        
+    # Find common products sold across the selected months (intersection of product names)
+    if third_last_month:
+        # If three months are available, find products sold in all three months
+        common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
+        set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
+        set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
+        )
+    
 
         # Filter the DataFrame for these common products
         common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
 
-        # Filter for Price_cat $0-20 only
-        common_products_df = common_products_df[common_products_df['Price_cat'] == '$0-20']
-
-                                                
-        # Group by Product Name, Price_cat, and Month, and sum the quantities sold
+        # Filter for Price_cat $0-20 onlyantities sold
         result = common_products_df.groupby(['Product Name', 'Price_cat', 'Month'])['Qty Sold'].sum().reset_index()
 
         # Pivot the data to get separate columns for each month's quantity sold
@@ -203,13 +203,13 @@ def show_stories(df):
                     text-align: right !important;
                     min-width: 100px !important;
                 }
-            </style>
-    """, unsafe_allow_html=True)
-
-    # Display the dataframe
-    st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
-
-        
+                </style>
+        """, unsafe_allow_html=True)
+    
+        # Display the dataframe
+        st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
+    
+            
     
 else:
     st.write("<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>.....No sufficient data at the moment.</h1>", 
