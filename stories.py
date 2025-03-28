@@ -93,20 +93,26 @@ def show_stories(df):
     result = result.merge(price_mapping, on="Product Name", how="left")
 
 
+    # Format numeric values
+    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")  # Format with comma separators
+    result["Price"] = result["Price"].apply(lambda x: f"${x:,.2f}")  # Format as currency
+
+    # Ensure 'Product Name' wraps, but 'Price' and 'Qty Sold' do not
+    result['Product Name'] = result['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=30)))
+
     # Select only relevant columns and reset index
-    result = result[['Product Name', "Price", 'Qty Sold']].sort_values(by='Qty Sold', ascending=False)
+    result = result[['Product Name', 'Price', 'Qty Sold']].sort_values(by='Qty Sold', ascending=False)
     result.reset_index(drop=True, inplace=True)
     result.index += 1  # Start numbering from 1
 
-    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
-    result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
+    # Display in Streamlit with better formatting
+    st.dataframe(
+        result.style.set_properties(
+            subset=['Product Name'], **{'white-space': 'pre-wrap'}
+        ),
+        use_container_width=True
+    )
     
-   # Reorder columns for better readability
-    result = result[['Product Name', 'Price', 'Qty Sold']]
-    
-    # Display in Streamlit
-    st.dataframe(result, use_container_width=True)
-   
 
 
 
