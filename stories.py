@@ -96,16 +96,7 @@ def show_stories(df):
     # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
-    # Custom CSS to prevent text wrapping except for Product Name
-    st.markdown("""
-    <style>
-        .stDataFrame th, .stDataFrame td {
-            white-space: nowrap;
-        }
-        .stDataFrame td:nth-child(1) {
-            white-space: normal !important;
-        }
-    </style>
+    
     """, unsafe_allow_html=True)
     
     # Display the dataframe with adjusted column widths
