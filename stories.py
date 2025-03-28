@@ -60,59 +60,64 @@ def prepare_data(df):
 
     
 
-
 def show_stories(df):
-
+    st.markdown(
+        "<h1 style='color:#7D4E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
+        unsafe_allow_html=True)
 
     st.markdown(
-    "<h1 style='color:#7D4E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
-    unsafe_allow_html=True)
+        "<h1 style='color:#BD7E58; font-size: 20px; font-weight: bold; font-style: italic;'> All Beauty & personal care products sold at $0-20</h1>", 
+        unsafe_allow_html=True)
 
-    st.markdown(
-    "<h1 style='color:#BD7E58; font-size: 20px; font-weight: bold; font-style: italic;'> All Beauty & personal care products sold at $0-20</h1>", 
-    unsafe_allow_html=True)
-
-
-    # FILTER BEAUTY & CARE PRODUCTS, $0-20 PRICE CAT
-
-    
     # Filter products from 'Beauty & Personal Care' category
     care_product_df = df[df['Product Category'] == 'Beauty & Personal Care']
-
-    # Further filter products with price category $0-20
     care_product_df = care_product_df[care_product_df['Price_cat'] == '$0-20']
 
-    # Retain only the first price per product (assuming price remains the same)
+    # Retain only the first price per product
     price_mapping = care_product_df.groupby("Product Name")["Price"].first().reset_index()
     
     # Group by Product Name and Price Category, summing the quantities sold
     result = care_product_df.groupby(['Product Name', 'Price_cat'])['Qty Sold'].sum().reset_index()
-
     
     # Merge the price information
     result = result.merge(price_mapping, on="Product Name", how="left")
 
-
-    # Format numeric values
-    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")  # Format with comma separators
-    result["Price"] = result["Price"].apply(lambda x: f"${x:,.2f}")  # Format as currency
-
-    # Ensure 'Product Name' wraps, but 'Price' and 'Qty Sold' do not
-    result['Product Name'] = result['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, width=30)))
-
     # Select only relevant columns and reset index
-    result = result[['Product Name', 'Price', 'Qty Sold']].sort_values(by='Qty Sold', ascending=False)
+    result = result[['Product Name', "Price", 'Qty Sold']].sort_values(by='Qty Sold', ascending=False)
     result.reset_index(drop=True, inplace=True)
     result.index += 1  # Start numbering from 1
 
-    # Display in Streamlit with better formatting
-    st.dataframe(
-        result.style.set_properties(
-            subset=['Product Name'], **{'white-space': 'pre-wrap'}
-        ),
-        use_container_width=True
-    )
+    # Format numbers
+    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
+    result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
+  
+    # Reorder columns for better readability
+    result = result[['Product Name', 'Price', 'Qty Sold']]
     
+    # Custom CSS to prevent text wrapping except for Product Name
+    st.markdown("""
+    <style>
+        .stDataFrame th, .stDataFrame td {
+            white-space: nowrap;
+        }
+        .stDataFrame td:nth-child(1) {
+            white-space: normal !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Display the dataframe with adjusted column widths
+    st.dataframe(
+        result,
+        column_config={
+            "Product Name": "Product Name",
+            "Price": st.column_config.NumberColumn("Price", format="$%.2f"),
+            "Qty Sold": "Qty Sold"
+        },
+        hide_index=False,
+        use_container_width=True,
+        height=(len(result) + 1) * 35 + 3  # Adjust height dynamically
+    )
 
 
 
