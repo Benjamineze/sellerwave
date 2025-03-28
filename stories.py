@@ -93,67 +93,30 @@ def show_stories(df):
     # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
-    # Create HTML table with custom styling
-    html = """
+    # Custom CSS to prevent text wrapping except for Product Name
+    st.markdown("""
     <style>
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .custom-table th {
-            background-color: #f8f9fa;
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        .stDataFrame th, .stDataFrame td {
             white-space: nowrap;
         }
-        .custom-table td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-            vertical-align: top;
-        }
-        .product-name {
+        .stDataFrame td:nth-child(1) {
             white-space: normal !important;
-            word-wrap: break-word !important;
-            max-width: 400px;
-            min-width: 200px;
-        }
-        .compact-cell {
-            white-space: nowrap !important;
-            width: 1%;
         }
     </style>
-    <table class="custom-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Qty Sold</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
+    """, unsafe_allow_html=True)
     
-    # Add table rows
-    for idx, row in result.iterrows():
-        html += f"""
-        <tr>
-            <td class="compact-cell">{idx}</td>
-            <td class="product-name">{row['Product Name']}</td>
-            <td class="compact-cell">${row['Price']}</td>
-            <td class="compact-cell">{row['Qty Sold']}</td>
-        </tr>
-        """
-    
-    html += """
-        </tbody>
-    </table>
-    """
-    
-    # Display the custom table
-    st.markdown(html, unsafe_allow_html=True)
-
+    # Display the dataframe with adjusted column widths
+    st.dataframe(
+        result,
+        column_config={
+            "Product Name": "Product Name",
+            "Price": st.column_config.NumberColumn("Price", format="$%.2f"),
+            "Qty Sold": "Qty Sold"
+        },
+        hide_index=False,
+        use_container_width=True,
+        height=(len(result) + 1) * 35 + 3  # Adjust height dynamically
+    )
 
     # ALL $0-20 PRODUCTS WITH 3 MONTHS CONSECUTIVE SALES
 
