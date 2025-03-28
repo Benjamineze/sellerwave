@@ -94,9 +94,7 @@ def show_stories(df):
     result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
 
-    # Wrap long product names with line breaks every 60 characters
-    #result['Product Name'] = result['Product Name'].apply(lambda x: '<br>'.join(textwrap.wrap(x, 60)))
-
+    
     # Custom CSS to ensure product names wrap properly
     st.markdown("""
         <style>
@@ -188,10 +186,34 @@ def show_stories(df):
         pivot_result.columns = pivot_result.columns.str.strip()
         pivot_result.columns = pivot_result.columns.str.encode('ascii', 'ignore').str.decode('utf-8')
 
-        # Display the result as a table in Streamlit
-        st.table(pivot_result)  # Display the DataFrame as a table
         
+    # Custom CSS to ensure product names wrap properly
+    st.markdown("""
+        <style>
+            div[data-testid="stTable"] table {
+                table-layout: fixed !important;
+                width: 100% !important;
+            }
+            div[data-testid="stTable"] th:nth-child(1),
+            div[data-testid="stTable"] td:nth-child(1) {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                max-width: 300px !important;
+            }
+            div[data-testid="stTable"] th:nth-child(2),
+            div[data-testid="stTable"] th:nth-child(3),
+            div[data-testid="stTable"] td:nth-child(2),
+            div[data-testid="stTable"] td:nth-child(3) {
+                text-align: right !important;
+                min-width: 100px !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
+    # Display the dataframe
+    st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
+
+        
     
     else:
         st.write("<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>.....No sufficient data at the moment.</h1>", 
