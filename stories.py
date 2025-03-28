@@ -58,10 +58,6 @@ def prepare_data(df):
     return df, third_last_month, last_month, current_month, last_three_months
 
 
-    
-
-import streamlit as st
-import textwrap
 
 def show_stories(df):
     st.markdown(
