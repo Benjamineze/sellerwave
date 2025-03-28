@@ -95,7 +95,7 @@ def show_stories(df):
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
 
     # Wrap long product names with line breaks every 60 characters
-    result['Product Name'] = result['Product Name'].apply(lambda x: '<br>'.join(textwrap.wrap(x, 60)))
+    #result['Product Name'] = result['Product Name'].apply(lambda x: '<br>'.join(textwrap.wrap(x, 60)))
 
     # Custom CSS to ensure product names wrap properly
     st.markdown("""
