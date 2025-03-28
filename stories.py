@@ -59,6 +59,8 @@ def prepare_data(df):
 
 
     
+
+
 import streamlit as st
 
 def show_stories(df):
@@ -92,7 +94,7 @@ def show_stories(df):
     result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
 
-    # Custom CSS to wrap product names and auto-fit other columns
+    # Custom CSS to wrap product names with a max of 3 lines
     st.markdown("""
         <style>
             div[data-testid="stTable"] table {
@@ -104,6 +106,12 @@ def show_stories(df):
                 white-space: normal !important;
                 word-wrap: break-word !important;
                 max-width: 300px !important;
+                line-height: 1.2 !important;
+                max-height: 3.6em !important;
+                overflow: hidden !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 3 !important;
+                -webkit-box-orient: vertical !important;
             }
             div[data-testid="stTable"] th:nth-child(2),
             div[data-testid="stTable"] th:nth-child(3),
@@ -125,7 +133,7 @@ def show_stories(df):
         },
         hide_index=False,
         use_container_width=True,
-        height=(len(result) + 1) * 35 + 3  # Adjust height dynamically
+        height=(len(result) + 1) * 40 + 3  # Adjust height dynamically
     )
 
     # ALL $0-20 PRODUCTS WITH 3 MONTHS CONSECUTIVE SALES
