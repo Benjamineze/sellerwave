@@ -140,7 +140,7 @@ def show_Decision(df):
         pivot_result.index += 1  # Start numbering from 1
 
         # Display the result as a table in Streamlit
-        st.table(pivot_result)  # Display the DataFrame as a table
+        st.pd.dataframe(pivot_result)  # Display the DataFrame as a table
 
     else:
         st.markdown(
