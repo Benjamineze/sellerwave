@@ -59,6 +59,8 @@ def prepare_data(df):
 
 
     
+import streamlit as st
+
 def show_stories(df):
     st.markdown(
         "<h1 style='color:#7D4E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
@@ -89,29 +91,37 @@ def show_stories(df):
     # Format numbers
     result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
-  
-    # Reorder columns for better readability
-    result = result[['Product Name', 'Price', 'Qty Sold']]
-    
-    # Custom CSS to prevent text wrapping except for Product Name
+
+    # Custom CSS to wrap product names and auto-fit other columns
     st.markdown("""
-    <style>
-        .stDataFrame th, .stDataFrame td {
-            white-space: nowrap;
-        }
-        .stDataFrame td:nth-child(1) {
-            white-space: normal !important;
-        }
-    </style>
+        <style>
+            div[data-testid="stTable"] table {
+                table-layout: auto !important;
+                width: 100% !important;
+            }
+            div[data-testid="stTable"] th:nth-child(1),
+            div[data-testid="stTable"] td:nth-child(1) {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                max-width: 300px !important;
+            }
+            div[data-testid="stTable"] th:nth-child(2),
+            div[data-testid="stTable"] th:nth-child(3),
+            div[data-testid="stTable"] td:nth-child(2),
+            div[data-testid="stTable"] td:nth-child(3) {
+                text-align: right !important;
+                min-width: 80px !important;
+            }
+        </style>
     """, unsafe_allow_html=True)
-    
-    # Display the dataframe with adjusted column widths
+
+    # Display the dataframe with auto-fit column settings
     st.dataframe(
         result,
         column_config={
             "Product Name": "Product Name",
             "Price": st.column_config.NumberColumn("Price", format="$%.2f"),
-            "Qty Sold": "Qty Sold"
+            "Qty Sold": st.column_config.NumberColumn("Qty Sold", format="%d"),
         },
         hide_index=False,
         use_container_width=True,
