@@ -59,10 +59,9 @@ def prepare_data(df):
 
 
     
-
 def show_stories(df):
     st.markdown(
-        "<h1 style='color:#7D7E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
+        "<h1 style='color:#7D4E57; font-size: 24px; font-style: italic;'>Sales Analysis</h1>", 
         unsafe_allow_html=True)
 
     st.markdown(
@@ -94,41 +93,40 @@ def show_stories(df):
     # Reorder columns for better readability
     result = result[['Product Name', 'Price', 'Qty Sold']]
     
-    # Custom CSS to handle text wrapping
+    # Custom CSS for perfect wrapping control
     st.markdown("""
     <style>
-        /* Target the data table specifically */
-        div[data-testid="stDataFrame"] table {
+        /* Make the table use all available width */
+        .stDataFrame {
             width: 100%;
         }
         
-        /* Prevent wrapping for all cells by default */
-        div[data-testid="stDataFrame"] td {
-            white-space: nowrap;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* Allow wrapping only for the Product Name column (first column) */
-        div[data-testid="stDataFrame"] td:nth-child(1) {
+        /* Force the first column to wrap text */
+        .stDataFrame td:nth-child(1) {
             white-space: normal !important;
-            word-wrap: break-word !important;
-            max-width: 300px !important;
+            word-break: break-word !important;
+            min-width: 200px;
+            max-width: 400px;
         }
         
-        /* Header styling */
-        div[data-testid="stDataFrame"] th {
+        /* Keep other columns compact */
+        .stDataFrame td:not(:nth-child(1)) {
+            white-space: nowrap !important;
+            width: 1%;
+        }
+        
+        /* Header alignment */
+        .stDataFrame th {
             white-space: nowrap;
         }
     </style>
     """, unsafe_allow_html=True)
     
-    # Display the dataframe with adjusted settings
+    # Display the dataframe with optimal settings
     st.dataframe(
         result,
         column_config={
-            "Product Name": st.column_config.TextColumn(
+            "Product Name": st.column_config.Column(
                 "Product Name",
                 width="large"
             ),
@@ -137,7 +135,7 @@ def show_stories(df):
                 format="$%.2f",
                 width="small"
             ),
-            "Qty Sold": st.column_config.TextColumn(
+            "Qty Sold": st.column_config.Column(
                 "Qty Sold",
                 width="small"
             )
@@ -146,7 +144,6 @@ def show_stories(df):
         use_container_width=True,
         height=(len(result) + 1) * 35 + 3
     )
-
 
 
     # ALL $0-20 PRODUCTS WITH 3 MONTHS CONSECUTIVE SALES
