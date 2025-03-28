@@ -211,10 +211,10 @@ def show_stories(df):
 
         
     
-    else:
-        st.write("<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>.....No sufficient data at the moment.</h1>", 
-        unsafe_allow_html=True)
-        
+else:
+    st.write("<h1 style='color:grey; font-size: 16px; font-weight: bold; font-style: italic;'>.....No sufficient data at the moment.</h1>", 
+    unsafe_allow_html=True)
+    
 
 
     # ALL $0-20 PRODUCTS WITH 2 MONTHS CONSECUTIVE SALES
