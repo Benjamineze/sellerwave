@@ -139,9 +139,10 @@ def show_Decision(df):
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
 
-        # Custom CSS to ensure product names wrap properly
+
+         # Custom CSS to ensure product names wrap properly
         st.markdown("""
-            <style>
+        <style>
             div[data-testid="stTable"] table {
                 table-layout: fixed !important;
                 width: 100% !important;
@@ -159,16 +160,13 @@ def show_Decision(df):
                 text-align: right !important;
                 min-width: 100px !important;
             }
-            </style>
-            """, unsafe_allow_html=True)
-            # Reorder columns for better readability
-            result = result[['Product Name', 'Price', 'Qty Sold']]
+        </style>
+        """, unsafe_allow_html=True)
         
         # Display the dataframe
-        st.write(result.to_html(escape=False, index=True), unsafe_allow_html=True)
-  
-   
-    
+        st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
+
+
 
     else:
         st.markdown(
@@ -240,12 +238,9 @@ def show_Decision(df):
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
 
-        # Display the result as a table in Streamlit
-        st.table(pivot_result)  # Display the DataFrame as a table
-
-
-        # Custom CSS to ensure product names wrap properly
-    st.markdown("""
+        
+         # Custom CSS to ensure product names wrap properly
+        st.markdown("""
         <style>
             div[data-testid="stTable"] table {
                 table-layout: fixed !important;
@@ -265,15 +260,14 @@ def show_Decision(df):
                 min-width: 100px !important;
             }
         </style>
-    """, unsafe_allow_html=True)
-    # Reorder columns for better readability
-    result = result[['Product Name', 'Price', 'Qty Sold']]
+        """, unsafe_allow_html=True)
         
-    # Display the dataframe
-    st.write(result.to_html(escape=False, index=True), unsafe_allow_html=True)
-  
-   
-    
+        # Display the dataframe
+        st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
+
+
+
+
     else:
           st.markdown(
     "<h1 style='color:#4A4A48; font-size: 16px; font-weight: bold; font-style: italic;'>sorry...last 2 months data not available at the momemt... </h1>", 
