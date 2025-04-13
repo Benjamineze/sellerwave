@@ -405,7 +405,7 @@ def show_Amazon_dashboard(df):
         plot_data = plot_data.sort_values(by='Qty Sold', ascending=True)
 
 
-        plot_data['Product Name'] =plot_data['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, 60)))
+        plot_data['Product Name'] =plot_data['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, 40)))
 
 
         # Plotting the month-on-month growth
