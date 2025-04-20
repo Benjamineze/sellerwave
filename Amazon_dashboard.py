@@ -424,7 +424,9 @@ def show_Amazon_dashboard(df):
         # Ensure 'Qty Sold' is numeric and drop any NA if somehow present
         plot_data['Qty Sold'] = pd.to_numeric(plot_data['Qty Sold'], errors='coerce')
         plot_data = plot_data.dropna(subset=['Qty Sold'])
-        max_value = plot_data['Qty Sold'].max() # Find the maximum value in the data
+        plot_data['Qty Sold'] = plot_data['Qty Sold'].astype(int)
+        
+        max_value = plot_data['Qty Sold'].max()    # Find the maximum value in the data
         plt.xlim(0, max_value * 1.2)  # Adjust x-axis limit to add extra space above the highest bar
 
         # Annotate bars with values (the quantity sold)
