@@ -512,7 +512,8 @@ def show_Amazon_dashboard(df):
     sns.barplot(x="Qty Sold", y="Product Name", hue="Month", data=melted_data, ax=ax, palette="muted")
 
     # Adding more space above the highest bar for better readability
-    max_value = melted_data['Qty Sold'].max()  # Find the maximum value in the data
+    # max_value = melted_data['Qty Sold'].max()  # Find the maximum value in the data
+    max_value = df['Qty Sold'].dropna().astype(float).max()
     plt.xlim(0, max_value * 1.2)  # Adjust x-axis limit to add extra space above the highest bar
 
     # Annotate bars with values (the quantity sold)
