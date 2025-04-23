@@ -184,14 +184,15 @@ def show_stories(df):
         #pivot_result = pivot_result[pivot_result['Growth'] > 0]
 
         # Format the columns for better readability
-        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
         pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
 
         # Format the third last month if data is available
         
-        pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,}")
+        pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,.0f}")
         pivot_result = pivot_result[['Product Name', third_last_month, last_month, current_month, 'Growth']]
+        pivot_result = pivot_result.fillna(0)
         
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
