@@ -427,6 +427,10 @@ def show_stories(df):
         # Display the dataframe
         st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
 
+        if pivot_result.empty:
+            st.write("<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>", 
+              unsafe_allow_html=True)
+
 
 
 
