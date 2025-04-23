@@ -354,106 +354,91 @@ def show_Amazon_dashboard(df):
         st.write("No products with high sales potential detected.")
 
 
-#PRODUCTS WITH POSITIVE MONTH ON MONTH GROWTH (3 MONTHS)
 
+
+    # PRODUCTS WITH POSITIVE MONTH ON MONTH GROWTH (3 MONTHS)
 
     st.markdown(
-    "<h1 style='color:grey; font-size: 17px; font-weight: bold; font-style: italic;'>Products with </span><span style='color:blue;'>Month-on-Month growth (3 Months)</h1>", 
-    unsafe_allow_html=True
+        "<h1 style='color:grey; font-size: 17px; font-weight: bold; font-style: italic;'>Products with </span><span style='color:green;'>Month-on-Month growth (3 Months)</h1>", 
+        unsafe_allow_html=True
     )
 
     # Prepare the data
     df, third_last_month, last_month, current_month, last_three_months = prepare_data(df)
 
-     # If only 1 month exists, display a message and return
+    # If only 1 month exists, display a message and return
     if third_last_month is None and last_month == current_month:
         st.write("Not enough data to calculate growth.")
-        return
-
-    # Filter products sold in the last three months
-    products_sold_last_months = df[df['Month'].isin(last_three_months)]
-
-    # Find common products sold across all three months
-    common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
-        set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
-        set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
-    )
-
-    # Filter DataFrame for these common products
-    common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
-
-    # Group by Product Name and Month, and sum the quantities sold
-    result = common_products_df.groupby(['Product Name', 'Month'])['Qty Sold'].sum().reset_index()
-
-    # Pivot the data to get separate columns for each month's quantity sold
-    pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
-
-    # Calculate growth only if enough data is available
-    if third_last_month in pivot_result.columns:
-        # Filter the data for positive growth in each of the last three months
-        pivot_result = pivot_result[
-        (pivot_result[current_month] > pivot_result[last_month]) &
-        (pivot_result[last_month] > pivot_result[third_last_month])
-        ]
-    
-        # Check if the filtered data is empty or contains NaN values
-        if pivot_result.empty or pivot_result['Qty Sold'].isna().all():
-            st.markdown(
-                "<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>",
-            unsafe_allow_html=True
-        )
-        return
-
-        # Prepare data for the plot
-        plot_data = result[result['Product Name'].isin(pivot_result['Product Name'])]
-
-        # Sort the category sales DataFrame in descending order of Qty Sold
-        plot_data = plot_data.sort_values(by='Qty Sold', ascending=True)
-
-
-        plot_data['Product Name'] =plot_data['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, 40)))
-
-
-        # Plotting the month-on-month growth
-        fig, ax = plt.subplots(figsize=(10, 8))
-        sns.barplot(data=plot_data, x='Qty Sold', y='Product Name', hue='Month', ax=ax)
-        ax.set_title("Month-on-Month Positive Growth (3months)", pad=15)
-        ax.set_xlabel("Month", labelpad=20)
-        ax.set_ylabel("Total Quantity Sold")
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        # Rotate x-axis labels for better readability and adjust size
-        plt.xticks(rotation=45, ha="right", fontsize=12)
-
-
-        # Adding more space above the highest bar for better readability
-        # Ensure 'Qty Sold' is numeric and drop any NA if somehow present
-        plot_data['Qty Sold'] = pd.to_numeric(plot_data['Qty Sold'], errors='coerce')
-        plot_data = plot_data.dropna(subset=['Qty Sold'])
-        plot_data['Qty Sold'] = plot_data['Qty Sold'].astype(int)
-        
-        max_value = plot_data['Qty Sold'].max()    # Find the maximum value in the data
-        plt.xlim(0, max_value * 1.2)  # Adjust x-axis limit to add extra space above the highest bar
-
-        # Annotate bars with values (the quantity sold)
-        for p in ax.patches:
-            width = p.get_width()
-            if width < 0:  # Avoid negative values if present
-                width = 0
-            
-            # Adjust annotation position: Ensure it stays inside the bars
-            ax.annotate(f'{int(width):,}', 
-                        (width + 5, p.get_y() + p.get_height() / 2),  # Position slightly inside the bar
-                        ha='left', va='center', color='black', fontsize=10)
-
-        # Adjust y-axis labels' font size
-        ax.tick_params(axis='y', labelsize=12)
-        # Display the plot in Streamlit
-        st.pyplot(fig)
     else:
-        st.write("<h1 style='color:#BD7E58; font-size: 20px; font-weight: bold; font-style: italic;'>ooopss.....Not enough data to calculate growth.</h1>", 
-        unsafe_allow_html=True)
-        
+        # Filter products sold in the last three months
+        products_sold_last_months = df[df['Month'].isin(last_three_months)]
+
+        # Find common products sold across all three months
+        common_products = set(products_sold_last_months[products_sold_last_months['Month'] == current_month]['Product Name']).intersection(
+            set(products_sold_last_months[products_sold_last_months['Month'] == last_month]['Product Name']),
+            set(products_sold_last_months[products_sold_last_months['Month'] == third_last_month]['Product Name'])
+        )
+
+        # Filter DataFrame for these common products
+        common_products_df = products_sold_last_months[products_sold_last_months['Product Name'].isin(common_products)]
+
+        # Group by Product Name and Month, and sum the quantities sold
+        result = common_products_df.groupby(['Product Name', 'Month'])['Qty Sold'].sum().reset_index()
+
+        # Pivot the data to get separate columns for each month's quantity sold
+        pivot_result = result.pivot(index='Product Name', columns='Month', values='Qty Sold').reset_index()
+
+        # Check if all 3 months exist in columns
+        if third_last_month in pivot_result.columns and last_month in pivot_result.columns and current_month in pivot_result.columns:
+            # Filter the data for positive growth across all three months
+            growth_filtered = pivot_result[
+                (pivot_result[current_month] > pivot_result[last_month]) &
+                (pivot_result[last_month] > pivot_result[third_last_month])
+            ]
+
+            if growth_filtered.empty:
+                st.markdown(
+                    "<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>",
+                    unsafe_allow_html=True
+                )
+            else:
+                # Prepare data for the plot
+                plot_data = result[result['Product Name'].isin(growth_filtered['Product Name'])]
+                plot_data = plot_data.sort_values(by='Qty Sold', ascending=True)
+                plot_data['Product Name'] = plot_data['Product Name'].apply(lambda x: '\n'.join(textwrap.wrap(x, 40)))
+
+                # Plotting the month-on-month growth
+                fig, ax = plt.subplots(figsize=(10, 8))
+                sns.barplot(data=plot_data, x='Qty Sold', y='Product Name', hue='Month', ax=ax)
+                ax.set_title("Month-on-Month Positive Growth (3 Months)", pad=15)
+                ax.set_xlabel("Total Quantity Sold", labelpad=20)
+                ax.set_ylabel("Product Name")
+
+                # Adjust axis settings
+                plt.xticks(rotation=45, ha="right", fontsize=12)
+                plt.tight_layout()
+
+                # Add space above the bars
+                max_value = plot_data['Qty Sold'].dropna().max()
+                plt.xlim(0, max_value * 1.2)
+
+                # Annotate bars
+                for p in ax.patches:
+                    width = p.get_width()
+                    ax.annotate(f'{int(width):,}', 
+                                (width + 5, p.get_y() + p.get_height() / 2), 
+                                ha='left', va='center', color='black', fontsize=10)
+
+                ax.tick_params(axis='y', labelsize=12)
+
+                # Display the plot
+                st.pyplot(fig)
+        else:
+            st.markdown(
+                "<h1 style='color:#BD7E58; font-size: 20px; font-weight: bold; font-style: italic;'>Ooops... Not enough data to calculate growth.</h1>", 
+                unsafe_allow_html=True
+            )
+
 
 
 
@@ -524,7 +509,6 @@ def show_Amazon_dashboard(df):
 
     # Adding more space above the highest bar for better readability
     max_value = melted_data['Qty Sold'].max()  # Find the maximum value in the data
-    max_value = df['Qty Sold'].dropna().astype(float).max()
     plt.xlim(0, max_value * 1.2)  # Adjust x-axis limit to add extra space above the highest bar
 
     # Annotate bars with values (the quantity sold)
