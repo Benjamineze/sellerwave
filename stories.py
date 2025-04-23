@@ -380,10 +380,14 @@ def show_stories(df):
                                 / pivot_result[third_last_month]) * 100
         
         # Filter rows where sales increase over the three months
-        pivot_result = pivot_result[
+        growth_filtered = pivot_result[
             (pivot_result[current_month] > pivot_result[last_month]) &
             (pivot_result[last_month] > pivot_result[third_last_month])
         ]
+
+        # Store whether growth exists
+        has_growth = not growth_filtered.empty
+        pivot_result = growth_filtered
         
         # Adjust column ordering
         pivot_result = pivot_result[['Product Name', third_last_month, last_month, current_month, 'Growth']]
@@ -427,10 +431,11 @@ def show_stories(df):
         # Display the dataframe
         st.write(pivot_result.to_html(escape=False, index=True), unsafe_allow_html=True)
 
-        if pivot_result.empty:
-            st.write("<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>", 
-              unsafe_allow_html=True)
-
+        if not has_growth:
+            st.markdown(
+                "<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>",
+                    unsafe_allow_html=True
+                )
 
 
 
