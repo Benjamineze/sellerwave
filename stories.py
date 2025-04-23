@@ -183,6 +183,8 @@ def show_stories(df):
         # Filter for rows with positive growth
         #pivot_result = pivot_result[pivot_result['Growth'] > 0]
 
+        pivot_result = pivot_result.fillna(0)
+
         # Format the columns for better readability
         pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
         pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
@@ -197,7 +199,6 @@ def show_stories(df):
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
-        pivot_result = pivot_result.fillna(0)
 
         # Custom CSS to ensure product names wrap properly
         st.markdown("""
@@ -276,6 +277,8 @@ def show_stories(df):
         # Calculate growth between the current month and last month
         pivot_result['Growth'] = ((pivot_result[current_month] - pivot_result[last_month]) / pivot_result[last_month]) * 100
 
+        pivot_result = pivot_result.fillna(0)
+
         # Format the columns for better readability
         pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
         pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
@@ -288,7 +291,7 @@ def show_stories(df):
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
-        pivot_result = pivot_result.fillna(0)
+        
 # Custom CSS to ensure product names wrap properly
         st.markdown("""
         <style>
