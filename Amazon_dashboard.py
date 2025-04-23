@@ -396,7 +396,12 @@ def show_Amazon_dashboard(df):
         (pivot_result[last_month] > pivot_result[third_last_month])
         ]
     
-
+        if plot_data.empty or plot_data['Qty Sold'].isna().all():
+            st.markdown(
+            "<p style='color: grey; font-size: 15px; font-style: italic;'>📉 No Month-on-Month growth detected for the selected period.</p>",
+                unsafe_allow_html=True
+                )
+            return
 
         # Prepare data for the plot
         plot_data = result[result['Product Name'].isin(pivot_result['Product Name'])]
