@@ -97,7 +97,7 @@ def show_stories(df):
     result.reset_index(drop=True, inplace=True)
     result.index += 1  # Start numbering from 1
 
-    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,}")
+    result["Qty Sold"] = result["Qty Sold"].apply(lambda x: f"{x:,.0f}")
     result["Price"] = result["Price"].apply(lambda x: f"{x:,.2f}")
 
      # Custom CSS to ensure product names wrap properly
@@ -192,11 +192,12 @@ def show_stories(df):
         
         pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,.0f}")
         pivot_result = pivot_result[['Product Name', third_last_month, last_month, current_month, 'Growth']]
-        pivot_result = pivot_result.fillna(0)
+        
         
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
+        pivot_result = pivot_result.fillna(0)
 
         # Custom CSS to ensure product names wrap properly
         st.markdown("""
@@ -276,8 +277,8 @@ def show_stories(df):
         pivot_result['Growth'] = ((pivot_result[current_month] - pivot_result[last_month]) / pivot_result[last_month]) * 100
 
         # Format the columns for better readability
-        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
         pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
         pivot_result["Price"] = pivot_result["Price"].apply(lambda x: f"{x:,.2f}")
 
@@ -287,6 +288,7 @@ def show_stories(df):
         # Reset index and start numbering from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
+        pivot_result = pivot_result.fillna(0)
 # Custom CSS to ensure product names wrap properly
         st.markdown("""
         <style>
@@ -393,6 +395,8 @@ def show_stories(df):
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
 
+        pivot_result = pivot_result.fillna(0)
+
 
         # Custom CSS to ensure product names wrap properly
         st.markdown("""
@@ -424,7 +428,7 @@ def show_stories(df):
 
 
     else:
-         st.write("<h1 style='color:#BD7E58; font-size: 16px; font-weight: bold; font-style: italic;'>sorry.....Not enough data to calculate this growth.</h1>", 
+        st.write("<h1 style='color:#BD7E58; font-size: 16px; font-weight: bold; font-style: italic;'>sorry.....Not enough data to calculate this growth.</h1>", 
         unsafe_allow_html=True)
         
 
@@ -477,14 +481,15 @@ def show_stories(df):
    
 
         # Format the columns to show as readable numbers with commas
-        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
         pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
         
 
         # Reset index and start counting from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
+        pivot_result = pivot_result.fillna(0)
 
        # Custom CSS to ensure product names wrap properly
         st.markdown("""
@@ -563,15 +568,15 @@ def show_stories(df):
         pivot_result = pivot_result[pivot_result['Growth'] < 0]
 
         # Format growth values to show as percentages and other values with commas
-        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,}")
-        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,}")
+        pivot_result[last_month] = pivot_result[last_month].apply(lambda x: f"{x:,.0f}")
+        pivot_result[current_month] = pivot_result[current_month].apply(lambda x: f"{x:,.0f}")
         pivot_result['Growth'] = pivot_result['Growth'].apply(lambda x: f"{x:,.0f}%")
         
 
         # If third month data is available, format it
         if third_last_month:
-            pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,}")
-            #pivot_result['Growth (Last vs 3rd Last)'] = pivot_result['Growth (Last vs 3rd Last)'].apply(lambda x: f"{x:,}")
+            pivot_result[third_last_month] = pivot_result[third_last_month].apply(lambda x: f"{x:,.0f}")
+            #pivot_result['Growth (Last vs 3rd Last)'] = pivot_result["Growth (Last vs 3rd Last)'].apply(lambda x: f"{x:,.0f}")
 
         # Adjust column ordering: If third month exists, include it
         if third_last_month:
@@ -582,6 +587,7 @@ def show_stories(df):
         # Reset index and start counting from 1
         pivot_result.reset_index(drop=True, inplace=True)
         pivot_result.index += 1  # Start numbering from 1
+        pivot_result = pivot_result.fillna(0)
     
         # Custom CSS to ensure product names wrap properly
         st.markdown("""
